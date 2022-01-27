@@ -11,7 +11,7 @@ from tkinter import filedialog
 '''
 1.首先登录进大数据系统，手工复制处理sql报文的请求头,包括url和header，在线转换网址:https://tooltt.com/header2json/
 2.修改末尾main()函数里的url,注意url参数limit可自有调节
-3.修改末尾main()函数header,
+3.修改末尾main()函数header
 '''
 
 
