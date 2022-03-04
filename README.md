@@ -17,5 +17,5 @@
 - youhuixiaoqu.py 自动化完成每日优惠小区基站清理
 - ~~mkdir.py~~ 生成文件，不过OS库自带mkdir API，~~所以废弃~~
 ## ***other***
-picutil.py 图片处理工具，通过运维思想实现自动化
-spidersql.py 爬虫工具，抓取表格数据
+- picutil.py 图片处理工具，通过运维思想实现自动化
+- spidersql.py 爬虫工具，抓取表格数据
