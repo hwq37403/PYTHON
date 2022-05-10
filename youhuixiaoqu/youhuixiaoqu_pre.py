@@ -10,7 +10,138 @@ import pandas as pd
 import mkdir
 import time  # 引入time模块
 
+#自动化库
+import pyautogui as pag
+import webbrowser
+import pyperclip as pyc
 
+#自动化工具
+
+#向下按n次
+def pressdown(n):
+    time.sleep(0.5)
+    for i in range(0,n):
+        pag.hotkey('down') 
+
+#将s字符串粘贴        
+def cv(s):
+    pyc.copy(s)
+    time.sleep(0.5) 
+    pag.hotkey('ctrl', 'v') 
+    time.sleep(1)
+
+
+def login():
+    time.sleep(3)
+    pag.click(604, 500)
+    pag.typewrite('Aa12345678', interval=0.25) #模拟输入
+    pag.click(782, 540)#点击获取验证码
+
+    message_code=pag.prompt(text='', title="请输入短信验证码:", default='')
+    time.sleep(2)
+
+    pag.click(633, 532)
+    pag.press('capslock')
+
+    pag.typewrite(message_code, interval=0.25) #模拟输入
+
+    pag.press('capslock')
+
+    pag.click(800, 491)
+
+
+def writeSheet():
+    #登录完成
+    time.sleep(3)
+    pag.confirm(text='确认网页是否完全加载', title="", buttons=['OK','Cancel'])
+    time.sleep(1)
+    pag.click(176, 196)
+    time.sleep(0.5)
+    pag.click(30, 422)
+    time.sleep(0.5)
+    pag.click(49, 440)
+    time.sleep(0.5)
+    pag.click(109, 458)
+    time.sleep(0.5)
+    pag.click(575, 301)
+    date = time.strftime("%Y%m%d", time.localtime())
+
+    pyc.copy('优惠小区导入'+date) 
+    pag.hotkey('ctrl', 'v') 
+    msg=pag.confirm(text='选好日期后请点击ok',title='',buttons=['OK','Cancel'])
+    print(msg)
+    time.sleep(1)
+
+    pag.click(618, 450)
+    pressdown(10)
+    pag.hotkey('enter')
+
+    pag.click(1360, 451)
+    pressdown(1)
+    pag.hotkey('enter')
+
+    pag.click(545, 484)
+    pressdown(1)
+    pag.hotkey('enter')
+
+    pag.click(1349, 483)
+    pressdown(2)
+    pag.hotkey('enter')
+
+    pag.click(520, 519)
+    pressdown(2)
+    pag.hotkey('enter')
+    #10次下拉 1次下拉 1 2 2
+
+    pag.click(626, 561)
+
+    cv('烦请龚老师协助处理，谢谢支持！')
+
+    pag.click(774, 879)
+
+    filePath='E:\\WORK\\优惠小区\\优惠小区\\优惠小区导入' + date + '\\优惠小区导入' + date + '结果.xlsx'
+
+    cv(filePath)
+
+    pag.hotkey('enter')
+    time.sleep(1)
+    pag.click(551, 907)
+
+
+
+    time.sleep(2)
+    pag.click(379, 619)
+
+    pressdown(4)
+
+
+    pag.click(337, 885)
+    time.sleep(0.5)
+    pag.click(701, 290)
+    time.sleep(0.5)
+    pag.click(716, 307)
+    time.sleep(0.5)
+    pressdown(20)
+    time.sleep(0.5)
+    pag.click(732, 325)
+    time.sleep(0.5)
+    pag.click(745, 363)
+    time.sleep(0.5)
+
+    pressdown(12)
+    time.sleep(0.5)
+    pag.click(799, 555)
+    time.sleep(0.5)
+    pag.click(1057, 395)
+    time.sleep(0.5)
+    pag.click(1269, 649)
+    time.sleep(0.5)
+    # pag.click(287, 969)
+    pag.confirm(text='检查表单是否填写正确，并手动提交', title="", buttons=['OK','Cancel'])
+def autoWirteSheet():
+    webbrowser.open_new("http://10.101.214.135:9083/eoms35/index.do?method=saveSession&app=app")
+    login()
+    writeSheet()
 
 #将10位时间戳或者13位转换为时间字符串，默认为2017-10-01 13:37:04格式
 def timestamp_to_date(time_stamp, format_string="%Y-%m-%d"):
@@ -133,7 +264,10 @@ def controller():
             os.startfile(file+'\\优惠小区导入'+date+'.xlsx')
             os.startfile(tips)
             print("源文件格式是否正确:",flag)
-            input("已完成优惠小区处理，确认退出吗?（按任意键退出）")
+            input("已完成优惠小区处理，确认退出吗?（按任意键退出）")\
+            #自动化填写表单
+            time.sleep(2)
+            autoWirteSheet()
             exit(0)
         elif a == "N" or a=="n":
             print("你已退出了该程序！")
@@ -162,6 +296,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
