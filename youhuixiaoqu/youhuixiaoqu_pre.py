@@ -264,7 +264,7 @@ def controller():
             os.startfile(file+'\\优惠小区导入'+date+'.xlsx')
             os.startfile(tips)
             print("源文件格式是否正确:",flag)
-            input("已完成优惠小区处理，确认退出吗?（按任意键退出）")\
+            input("已完成优惠小区处理，确认退出吗?（按任意键退出）")
             #自动化填写表单
             time.sleep(2)
             autoWirteSheet()

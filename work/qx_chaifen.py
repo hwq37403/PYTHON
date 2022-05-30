@@ -2,7 +2,7 @@ import time  # 引入time模块
 
 import pandas as pd
 
-import work.mkdir as mkdir
+import os
 
 import openpyxl
 
@@ -20,27 +20,42 @@ from openpyxl import load_workbook
 ticks = time.localtime()
     # date=timestamp_to_ydate(ticks)
 date = time.strftime("%Y%m", time.localtime())
-date=int(date)
+# date=int(date)-1 #上个月YYYYMM
+date=int(date)-1 #上个月YYYYMM
 date=str(date)
 
 
 path = 'E:\\WORK\\网格酬金核算\\'+date+'网格承包\\网格承包'+date+' - 专业室.xlsx'
-# path = 'E:\\WORK\\网格酬金核算\\202104网格承包\\结果模板.xlsx'
 
-file1 = pd.read_excel(path, sheet_name='服务中心汇总',skiprows=1)
+
+
+file1 = pd.read_excel(path, sheet_name='城市')
+file1=file1[file1['区县'].notnull()]
+file2 = pd.read_excel(path, sheet_name='绝地反击型')
+file2=file2[file2['区县'].notnull()]
+file3 = pd.read_excel(path, sheet_name='强力进攻型')
+file3=file3[file3['区县'].notnull()]
+file4 = pd.read_excel(path, sheet_name='提值进攻型')
+file4=file4[file4['区县'].notnull()]
+file5 = pd.read_excel(path, sheet_name='稳存进攻型')
+file5=file5[file5['区县'].notnull()]
 # file2 = pd.read_excel('E:\\WORK\\网格酬金核算\\202103网格承包\\网格承包202103 - 专业室.xlsx', sheet_name='应知应会扣罚')
 # file3 = pd.read_excel(path, sheet_name='服务负向动作扣罚（4月，5月）')
 # # file3 = pd.read_excel('E:\\WORK\\网格酬金核算\\202104网格承包\\网格承包202104 - 专业室.xlsx', sheet_name='服务负向动作扣罚（4月）')
-file2 = pd.read_excel(path, sheet_name='客户代表奖金明细')
 file1.columns=file1.columns.str.strip()
 file2.columns=file2.columns.str.strip()
+file3.columns=file3.columns.str.strip()
+file4.columns=file4.columns.str.strip()
+file5.columns=file5.columns.str.strip()
 
 # file5 = pd.read_excel(path, sheet_name='分局绩效跟踪表')
 file1=file1.sort_values(by='区县')
 file2=file2.sort_values(by='区县')
+file3=file3.sort_values(by='区县')
+file4=file4.sort_values(by='区县')
+file5=file5.sort_values(by='区县')
 
-print(file1)
-print(file2)
+
 
 
 
@@ -54,10 +69,10 @@ menu1 = file1.loc[:,'区县'].drop_duplicates()
 
 
 menu2 = file2.loc[:, '区县'].drop_duplicates()
-# menu4 = file4.loc[:, '区县'].drop_duplicates()
-# menu5 = file5.loc[:, '区县'].drop_duplicates()
-print(menu1)
-print(menu2)
+menu3 = file3.loc[:, '区县'].drop_duplicates()
+menu4 = file4.loc[:, '区县'].drop_duplicates()
+menu5 = file5.loc[:, '区县'].drop_duplicates()
+
 
 
 
@@ -65,18 +80,21 @@ print(menu2)
 # print(file2)
 # print(file3)
 # print(file4)
+fname="E:\\WORK\\网格酬金核算\\"+date+"网格承包\\区县拆分"
 
+if os.path.exists(fname)==False:
+    os.mkdir("E:\\WORK\\网格酬金核算\\"+date+"网格承包\\区县拆分")
 
-mkdir.mkdir("E:\\WORK\\网格酬金核算\\"+date+"网格承包\\区县拆分")
-
-for name1,name2 in zip(menu1,menu2):
+for name1 in menu1:
     df1 = file1[file1['区县'] == name1]
-    df2 = file2[file2['区县'] == name2]
-    # df3 = file3[file3['区县'] == name3]
-    # df4 = file4[file4['区县'] == name4]
-    # df5 = file5[file5['区县'] == name5]
+    df2 = file2[file2['区县'] == name1]
+    df3 = file3[file3['区县'] == name1]
+    df4 = file4[file4['区县'] == name1]
+    df5 = file5[file5['区县'] == name1]
+    
 
-    filename="E:\\WORK\\网格酬金核算\\"+date+"网格承包\\模板.xlsx"
+    #TODO 自助创建模板
+    filename="E:\\WORK\\网格酬金核算\\模板.xlsx"
     outpath = "E:\\WORK\\网格酬金核算\\"+date+"网格承包\\区县拆分\\网格承包"+date+"-" + name1[0:2] + ".xlsx"
     #复制模板到拆分
 
@@ -88,13 +106,17 @@ for name1,name2 in zip(menu1,menu2):
     write = pd.ExcelWriter(outpath, engine='openpyxl')
     write.book = book
     write.sheets = {ws.title: ws for ws in book.worksheets}
-    df1.to_excel(write, sheet_name='服务中心汇总', header=False, index=False, startrow=2, startcol=0)
-    df2.to_excel(write, sheet_name='客户代表奖金明细', header=False, index=False, startrow=1, startcol=0)
+    df1.to_excel(write, sheet_name='城市', header=False, index=False, startrow=3, startcol=0)
+    df2.to_excel(write, sheet_name='绝地反击型', header=False, index=False, startrow=3, startcol=0)
+    df3.to_excel(write, sheet_name='强力进攻型', header=False, index=False, startrow=3, startcol=0)
+    df4.to_excel(write, sheet_name='提值进攻型', header=False, index=False, startrow=3, startcol=0)
+    df5.to_excel(write, sheet_name='稳存进攻型', header=False, index=False, startrow=3, startcol=0)
+    
     write.save()
 
 
 
-
+print('拆分完成')
 
 
 
