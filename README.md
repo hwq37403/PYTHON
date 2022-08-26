@@ -1,7 +1,8 @@
 # ***PYTHON***
+
+## ***quanxi***
+- quanxi.ipynb 全息分配
 ## ***work***
-- 自动化
-  - 4A.py 实现网页自动化脚本，4A账号一键登录，需提前登录一点通保证流程自动进行。
 - 数据清理
   - dataclear.py 通过合成基础表，利用fuzzywuzzy库模糊匹配功能，搜索符合条件关键字并实现vlookup
   - hecheng.py 合成基础表xlsx（可修改为合成csv,但合成csv文件使用CMD命令 COPY *.CSV ALL.CSV）
