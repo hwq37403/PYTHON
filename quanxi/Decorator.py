@@ -39,7 +39,7 @@ class wkkh_term(choose):
         df_tmp_res=df_tmp[(df_tmp['是否为宽带客户']==self.res[0])]
         return df_tmp_res
 
-#定义装饰器，并且实现接口
+#定义装饰器类，并且实现接口
 class Decorator(choose):
     def __init__(self,choose):
         self.choose=choose
