@@ -15,7 +15,7 @@ class choose(object):
 class wkkh_term(choose):
 
     def __init__(self,res):
-
+        self=choose
         self.res= res
     def choose_consumer(self):
         print('该对象基本功能')
