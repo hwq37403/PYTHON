@@ -1,0 +1,52 @@
+
+
+{
+    "main": "@分组查询()",
+
+    "表":"@用户表日()",
+    "查询字段": "@服务中心(),OPEN_TIME,RUN_NAME,@求和()",
+    "条件":"id={#id}",
+    "求和": "SUM(IS_NOW_TX) IS_NOW_TX,sum(is_now_cm) is_now_cm,sum(is_lgm_ncm_xl) is_lgm_ncm_xl",
+    
+
+    "计数":"",
+    "分组查询":" @查询服务中心分组()",
+
+
+    "查询":"select @查询字段() from @表() where @条件()", 
+
+
+    "服务中心": "x_county_id,x_county_name,x_area_id,x_area_name",
+    "区县":"x_county_id,x_county_name",
+    "全市":"'' x_county_id,'全市' x_county_name",
+    "南岸":"'' x_county_id,'南岸汇总' x_county_name",
+
+
+
+
+    "查询全市分组":"select @全市求和字段() from @表()",
+    "查询区县分组":"select @区县求和字段() from @表() group by @区县()",
+    "查询服务中心分组":"select @服务中心求和字段() from @表() group by @服务中心()",
+    "查询南岸分组":"select @南岸求和字段() from @表() where x_area_ID in ('1605085','1605086','1525802','1670526','1670525','1525811')",
+
+
+    "全市求和字段":"@全市(),@求和()",
+    "区县求和字段":"@区县(),@求和()",
+    "服务中心求和字段":"@服务中心(),@求和()",
+    "南岸求和字段":"@南岸(),@求和()",
+
+    
+
+    "客户开户":"sdb.v_ods_ur_user_info_yb",
+    "资费办理":"sdb.v_ods_pd_userprc_info_yb",
+    "营销办理":"sdb.v_ods_mk_actrecord_info_yb",
+    "批量开户":"sdb.v_ods_cs_custpreopen_info_his",
+    "宽带移机":"sdb.v_ods_ur_userservloc_info_yb",
+    "终端销售":"sdb.v_ods_dchnresmobinfo",
+    "携入携出":"sdb.ods_ur_carryingwork_info_d",
+    "携号查旬":"sdb.v_ods_ur_carrychklog_info",
+    "用户表日":"yb_dw_user_info_d_${month()}",
+    "用户表月":"yb_dw_user_info_m_${month()}"
+}
+
+
