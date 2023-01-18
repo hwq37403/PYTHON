@@ -4,7 +4,7 @@ import pandas as pd
 import openpyxl
 
 # 由于PD会覆盖重写sheet，为了保存一个EXCEL多个sheet，所有只能通过EXCELwriter使用一个句柄来写入多个sheet
-
+import numpy  as np
 import os
 import pandas as pd
 import mkdir
@@ -14,140 +14,6 @@ import time  # 引入time模块
 import pyautogui as pag
 import webbrowser
 import pyperclip as pyc
-
-# 自动化工具
-
-# 向下按n次
-
-
-def pressdown(n):
-    time.sleep(0.5)
-    for i in range(0, n):
-        pag.hotkey('down')
-
-# 将s字符串粘贴
-
-
-def cv(s):
-    pyc.copy(s)
-    time.sleep(0.5)
-    pag.hotkey('ctrl', 'v')
-    time.sleep(1)
-
-
-def login():
-    time.sleep(3)
-    pag.click(604, 500)
-    pag.typewrite('Aa12345678', interval=0.25)  # 模拟输入
-    pag.click(782, 540)  # 点击获取验证码
-
-    message_code = pag.prompt(text='', title="请输入短信验证码:", default='')
-    time.sleep(2)
-
-    pag.click(633, 532)
-    pag.press('capslock')
-
-    pag.typewrite(message_code, interval=0.25)  # 模拟输入
-
-    pag.press('capslock')
-
-    pag.click(800, 491)
-
-
-def writeSheet():
-    # 登录完成
-    time.sleep(3)
-    pag.confirm(text='确认网页是否完全加载', title="", buttons=['OK', 'Cancel'])
-    time.sleep(1)
-    pag.click(176, 196)
-    time.sleep(0.5)
-    pag.click(30, 422)
-    time.sleep(0.5)
-    pag.click(49, 440)
-    time.sleep(0.5)
-    pag.click(109, 458)
-    time.sleep(0.5)
-    pag.click(575, 301)
-    date = time.strftime("%Y%m%d", time.localtime())
-
-    pyc.copy('优惠小区导入'+date)
-    pag.hotkey('ctrl', 'v')
-    msg = pag.confirm(text='选好日期后请点击ok', title='', buttons=['OK', 'Cancel'])
-    print(msg)
-    time.sleep(1)
-
-    pag.click(618, 450)
-    pressdown(10)
-    pag.hotkey('enter')
-
-    pag.click(1360, 451)
-    pressdown(1)
-    pag.hotkey('enter')
-
-    pag.click(545, 484)
-    pressdown(1)
-    pag.hotkey('enter')
-
-    pag.click(1349, 483)
-    pressdown(2)
-    pag.hotkey('enter')
-
-    pag.click(520, 519)
-    pressdown(2)
-    pag.hotkey('enter')
-    # 10次下拉 1次下拉 1 2 2
-
-    pag.click(626, 561)
-
-    cv('烦请龚老师协助处理，谢谢支持！')
-
-    pag.click(774, 879)
-
-    filePath = 'E:\\WORK\\优惠小区\\优惠小区\\优惠小区导入' + date + '\\优惠小区导入' + date + '结果.xlsx'
-
-    cv(filePath)
-
-    pag.hotkey('enter')
-    time.sleep(1)
-    pag.click(551, 907)
-
-    time.sleep(2)
-    pag.click(379, 619)
-
-    pressdown(4)
-
-    pag.click(337, 885)
-    time.sleep(0.5)
-    pag.click(701, 290)
-    time.sleep(0.5)
-    pag.click(716, 307)
-    time.sleep(0.5)
-    pressdown(20)
-    time.sleep(0.5)
-    pag.click(732, 325)
-    time.sleep(0.5)
-    pag.click(745, 363)
-    time.sleep(0.5)
-
-    pressdown(12)
-    time.sleep(0.5)
-    pag.click(799, 555)
-    time.sleep(0.5)
-    pag.click(1057, 395)
-    time.sleep(0.5)
-    pag.click(1269, 649)
-    time.sleep(0.5)
-    # pag.click(287, 969)
-    pag.confirm(text='检查表单是否填写正确，并手动提交', title="", buttons=['OK', 'Cancel'])
-
-
-def autoWirteSheet():
-    webbrowser.open_new(
-        "http://10.101.214.135:9083/eoms35/index.do?method=saveSession&app=app")
-    login()
-    writeSheet()
-
-# 将10位时间戳或者13位转换为时间字符串，默认为2017-10-01 13:37:04格式
 
 
 def timestamp_to_date(time_stamp, format_string="%Y-%m-%d"):
@@ -169,7 +35,6 @@ def pre(date, flag):
     for filename in filenames:
         print(filename)
         tmp_path = path + '\\' + filename
-        print(111)
         df = pd.read_excel(tmp_path, sheet_name=None)
         print('sheet名为' + str(list(df)))
         # 循环sheet名，判断各种不规范表格，做数据清理
@@ -206,13 +71,13 @@ def pre(date, flag):
             x = len(str(df.loc[i, ['基站小区编号(16进制)']].values[0]))
             # print('长度读取到没'+str(len(x)))
             if x == 4 or x == 7 or x == 9:
-                print('111')
+                df.loc[i, '长度'] = x
+                df.loc[i, '文件名'] = filename
             else:
                 print('长度有问题,问题长度:'+str(x)+'行数为：'+str(col_count)+'----文件名为:'+filename +
                       '---代码为'+str(df.loc[i, ['基站小区编号(16进制)']].values[0]))
                 flag = False
-            df.loc[i, '长度'] = x
-            df.loc[i, '文件名'] = filename
+
         df_total = df_total.append(df)
 
         # print(df_total)
@@ -247,9 +112,25 @@ def xiaoquyouhui(date):
     outer = pd.merge(df1, df2, on='区县')
 
     print(outer)
+
     outer = outer.loc[:, [
         '基站名', '基站小区编号(10进制)', '基站小区编号(16进制)', '区县', '类型', '代码']]
-    outer.to_excel(out_path, index=False, encoding='utf-8')
+    #TODO 将outer转化为普通优惠配置模板数据格式
+
+    outer2=outer.loc[:,['代码','基站小区编号(16进制)']]
+    outer2['length'] = outer2['基站小区编号(16进制)'].astype(str).str.len()
+
+    #case when
+    outer2['网络制式'] = np.where(outer2['length']==4, '23G',
+                      np.where(outer2['length']==7, '4G', 
+                      np.where(outer2['length']==9, '5G', 'FALSE')))
+    outer2.rename(columns={'代码':'小区优惠代码','基站小区编号(16进制)':'基站信息'},inplace=True) 
+
+    outer2 = outer2.astype(str).drop(['length'], axis=1)  #删除a列
+
+    outer2.to_excel(out_path, index=False, encoding='utf-8')
+
+    # outer.to_excel(out_path, index=False, encoding='utf-8')
 
 
 # 逻辑流程
