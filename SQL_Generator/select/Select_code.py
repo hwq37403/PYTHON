@@ -1,7 +1,8 @@
 from dataclasses import replace
 import os
-from re import template
+from re import A, template
 import pandas as pd
+from sqlalchemy import func
 
 class Node():
     def __init__(self, item):
@@ -70,6 +71,15 @@ class Tree():
         print(node.elem, end=" ")
         self.inorder_travel(node.rchild)
 
+"""
+@description  : 条件字典，生成
+---------
+@param  :
+-------
+@Returns  :
+-------
+"""
+
 def condInit():
     cond_conn_list=["","and","or"]
     id1=[0,1,2]
@@ -81,7 +91,7 @@ def condInit():
 
     cond_list=[">","<","=","<>","NO_OP"]
     id3=[0,1,2,3,4]
-    d3=['大于','小于','等于','不等于','无运算']
+    d3=['大于','小于','等于','不等','无运算']
 
     cond_conn_op=pd.DataFrame({'cond_conn_op':cond_conn_list,'id':id1,'description':d1})
     agg=pd.DataFrame({'agg':agg_list,'id':id2,'description':d2})
@@ -90,11 +100,15 @@ def condInit():
     
 def search(tableName_df,ts,i,j):
     tmp=tableName_df[tableName_df.iloc[:,i].str.contains(ts,case=False)].iloc[:,j]
-    print(len(tmp))
+    print('tmp:-------------------------------------------')
+
+    print(tmp)
     if len(tmp)==0:
         return ts
     else:
-        res=tmp.values[0]
+        res=str(tmp.values)
+        res=res.replace('[','').replace(']','').replace('\'','')
+        # res=tmp
         return res
 
 def keyTravel(key_dict):
@@ -167,7 +181,14 @@ def select_sql():
     sql_res=sqlPrint(select_t)
 
 
-
+"""
+@description  :输出sql查询语句
+---------
+@param  :keywords 字段,con 条件,group_key 分组字段,tableName 查询表名,#TODO agg1 运算操作
+-------
+@Returns  :
+-------
+"""
 def initSqlTemplate(keywords,con,group_key,tableName):
     tableCount=len(tableName)
 
@@ -215,32 +236,34 @@ def append(list):
     return list_res
 
 
-def getAgg():
-    pass
 
-
-def getCondition():
+def getCondition(op_input,conn_input,agg_input):
     cond_tree = Tree()
 
     cond_conn_op,agg,cond_op=condInit()
+
+    print('test______________')
     print(cond_conn_op)
-    # print(agg)
+    print(agg)
     print(cond_op)
 
+    # print('agg():'+agg)
     
-    agg_input="等于"    
-    conn_input='与'
-    # cond_input="求和"
+
+
+
     cond_conn=search(cond_conn_op,conn_input,2,0)
-    cond=search(cond_op,agg_input,2,0)
-    # op=search(agg,cond_input,2,0)
+    cond=search(cond_op,op_input,2,0)
+    op=search(agg,agg_input,2,0)
 
 
     print('conn:'+cond_conn)
     # print('cond:'+op)
     print('agg:'+cond)
 
+    print('op:'+op)
 
+    return cond_conn,cond,op
 if __name__ == "__main__":
     
     # select_sql()
@@ -250,13 +273,21 @@ if __name__ == "__main__":
 
     group_key='x_area_id,x_area_name'
 
-    searchWords=['全量','mou']
+    searchWords=['用户','全量']
+
+    
+
+    op_input="等于"    
+    conn_input='与'
+    agg_input="求和"
+ 
 
     tableName=append(searchWords)
 
-    getAgg()
+    #获取条件及OP字段
+    conn,agg,op=getCondition(op_input,conn_input,agg_input)
 
-    getCondition()
+    #根据条件
 
     initSqlTemplate(keywords,con,group_key,tableName)
 
