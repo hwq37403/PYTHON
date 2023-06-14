@@ -10,12 +10,22 @@ import pandas as pd
 import mkdir
 import time  # 引入time模块
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # 自动化库
 import pyautogui as pag
 import webbrowser
 import pyperclip as pyc
+=======
+
+>>>>>>> Stashed changes
 
 
+=======
+
+
+
+>>>>>>> Stashed changes
 def timestamp_to_date(time_stamp, format_string="%Y-%m-%d"):
     time_array = time.localtime(time_stamp/1000)
     other_style_time = time.strftime(format_string, time_array)
@@ -129,9 +139,15 @@ def xiaoquyouhui(date):
     outer2 = outer2.astype(str).drop(['length'], axis=1)  #删除a列
 
     outer2.to_excel(out_path, index=False, encoding='utf-8')
+<<<<<<< Updated upstream
 
     # outer.to_excel(out_path, index=False, encoding='utf-8')
 
+=======
+
+    # outer.to_excel(out_path, index=False, encoding='utf-8')
+
+>>>>>>> Stashed changes
 
 # 逻辑流程
 def controller():
@@ -190,4 +206,12 @@ def main():
 
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     main()
+=======
+    main()
+>>>>>>> Stashed changes
+=======
+    main()
+>>>>>>> Stashed changes

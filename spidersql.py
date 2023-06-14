@@ -103,7 +103,7 @@ def main(url, headers):
 '''url和headers可修改'''
 if __name__ == '__main__':
 
-    url = ''
+    url='http://10.113.221.244:8002/bas/Account/ashx/SysAshx/DataQuery.ashx?p=GetData&page=1&limit=1000&dbtype=EM_CN&sqlstr=select+*+from+YB_TMP_HWQ_02&_=1657003062189'
 
     headers ={}
     main(url, headers)

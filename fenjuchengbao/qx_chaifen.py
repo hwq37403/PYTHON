@@ -21,12 +21,12 @@ ticks = time.localtime()
     # date=timestamp_to_ydate(ticks)
 date = time.strftime("%Y%m", time.localtime())
 # date=int(date)-1 #上个月YYYYMM
-date=int(date)-1 #上个月YYYYMM
+date=int(date) #YYYYMM
 date=str(date)
 
+date='202212'
 
 path = 'E:\\WORK\\网格酬金核算\\'+date+'网格承包\\网格承包'+date+' - 专业室.xlsx'
-
 
 
 file0 = pd.read_excel(path, sheet_name='服务中心汇总')
