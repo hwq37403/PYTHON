@@ -29,6 +29,8 @@ path = 'E:\\WORK\\网格酬金核算\\'+date+'网格承包\\网格承包'+date+'
 
 
 
+file0 = pd.read_excel(path, sheet_name='服务中心汇总')
+file0=file0[file0['区县'].notnull()]
 file1 = pd.read_excel(path, sheet_name='城市')
 file1=file1[file1['区县'].notnull()]
 file2 = pd.read_excel(path, sheet_name='绝地反击型')
@@ -42,6 +44,7 @@ file5=file5[file5['区县'].notnull()]
 # file2 = pd.read_excel('E:\\WORK\\网格酬金核算\\202103网格承包\\网格承包202103 - 专业室.xlsx', sheet_name='应知应会扣罚')
 # file3 = pd.read_excel(path, sheet_name='服务负向动作扣罚（4月，5月）')
 # # file3 = pd.read_excel('E:\\WORK\\网格酬金核算\\202104网格承包\\网格承包202104 - 专业室.xlsx', sheet_name='服务负向动作扣罚（4月）')
+file0.columns=file0.columns.str.strip()
 file1.columns=file1.columns.str.strip()
 file2.columns=file2.columns.str.strip()
 file3.columns=file3.columns.str.strip()
@@ -49,6 +52,7 @@ file4.columns=file4.columns.str.strip()
 file5.columns=file5.columns.str.strip()
 
 # file5 = pd.read_excel(path, sheet_name='分局绩效跟踪表')
+file0=file0.sort_values(by='区县')
 file1=file1.sort_values(by='区县')
 file2=file2.sort_values(by='区县')
 file3=file3.sort_values(by='区县')
@@ -65,6 +69,7 @@ file5=file5.sort_values(by='区县')
 #区县列名
 # menu1 = file1.iloc[:, 0].drop_duplicates()  ########2
 # menu2 = file2.iloc[:, 0].drop_duplicates()  ########0
+menu0 = file0.loc[:,'区县'].drop_duplicates()
 menu1 = file1.loc[:,'区县'].drop_duplicates()
 
 
@@ -86,6 +91,7 @@ if os.path.exists(fname)==False:
     os.mkdir("E:\\WORK\\网格酬金核算\\"+date+"网格承包\\区县拆分")
 
 for name1 in menu1:
+    df0 = file0[file0['区县'] == name1]
     df1 = file1[file1['区县'] == name1]
     df2 = file2[file2['区县'] == name1]
     df3 = file3[file3['区县'] == name1]
@@ -106,6 +112,7 @@ for name1 in menu1:
     write = pd.ExcelWriter(outpath, engine='openpyxl')
     write.book = book
     write.sheets = {ws.title: ws for ws in book.worksheets}
+    df0.to_excel(write, sheet_name='服务中心汇总', header=False, index=False, startrow=3, startcol=0)
     df1.to_excel(write, sheet_name='城市', header=False, index=False, startrow=3, startcol=0)
     df2.to_excel(write, sheet_name='绝地反击型', header=False, index=False, startrow=3, startcol=0)
     df3.to_excel(write, sheet_name='强力进攻型', header=False, index=False, startrow=3, startcol=0)
